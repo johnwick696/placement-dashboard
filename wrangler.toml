@@ -1,0 +1,19 @@
+name = "placement-portal"
+main = "src/worker.ts"
+compatibility_date = "2025-04-02"
+
+# Serve the static Next.js export from the `out` directory
+assets = { directory = "out", binding = "ASSETS" }
+
+[[routes]]
+pattern = "pms.prepcv.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.pms.prepcv.com"
+custom_domain = true
+
+[observability]
+enabled = true
+
+
