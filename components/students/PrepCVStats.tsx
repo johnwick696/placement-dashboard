@@ -97,12 +97,25 @@ export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProp
 
   return (
     <Card className="p-6">
-      <div className="flex items-center space-x-2 mb-6">
-        <TrendingUp className="w-5 h-5 text-blue-600" />
-        <h3 className="text-lg font-semibold text-gray-900">PrepCV Analytics</h3>
-        <Badge variant="success" className="ml-auto">
-          Overall Score: {prepCVScore}/100
-        </Badge>
+      {/* Header with enhanced design */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="bg-blue-600 p-2 rounded-lg">
+              <TrendingUp className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">PrepCV Analytics</h3>
+              <p className="text-sm text-gray-600">Comprehensive performance insights for {studentName}</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <Badge variant="success" className="text-sm px-3 py-1">
+              Overall Score: {prepCVScore}/100
+            </Badge>
+            <p className="text-xs text-gray-500 mt-1">Last updated: {new Date().toLocaleDateString()}</p>
+          </div>
+        </div>
       </div>
 
       {/* Stats Overview */}
@@ -142,97 +155,152 @@ export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProp
         </div>
       </div>
 
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Test Type Performance */}
-        <div>
-          <h4 className="text-md font-medium text-gray-900 mb-4">Test Type Performance</h4>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="average" fill="#3B82F6" />
-            </BarChart>
-          </ResponsiveContainer>
+      {/* Charts Grid - Full Width Layout */}
+      <div className="space-y-8">
+        {/* Top Row - Performance Charts */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          {/* Test Type Performance */}
+          <div className="xl:col-span-2">
+            <h4 className="text-md font-medium text-gray-900 mb-4">Test Type Performance</h4>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="average" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Test Completion Status */}
+          <div>
+            <h4 className="text-md font-medium text-gray-900 mb-4">Test Completion Status</h4>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={completionData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {completionData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        {/* Recent Test Scores */}
-        <div>
-          <h4 className="text-md font-medium text-gray-900 mb-4">Recent Test Scores</h4>
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={recentTests}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="score" stroke="#10B981" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+        {/* Middle Row - Progress and Skills */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          {/* Recent Test Scores */}
+          <div>
+            <h4 className="text-md font-medium text-gray-900 mb-4">Recent Test Scores Progress</h4>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={recentTests}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line 
+                  type="monotone" 
+                  dataKey="score" 
+                  stroke="#10B981" 
+                  strokeWidth={3}
+                  dot={{ fill: '#10B981', strokeWidth: 2, r: 6 }}
+                  activeDot={{ r: 8, stroke: '#10B981', strokeWidth: 2, fill: '#fff' }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
 
-        {/* Skills Radar Chart */}
-        <div>
-          <h4 className="text-md font-medium text-gray-900 mb-4">Skills Assessment</h4>
-          <ResponsiveContainer width="100%" height={200}>
-            <RadarChart data={skillsData}>
-              <PolarGrid />
-              <PolarAngleAxis dataKey="skill" />
-              <PolarRadiusAxis angle={30} domain={[0, 100]} />
-              <Radar name="Skills" dataKey="value" stroke="#8B5CF6" fill="#8B5CF6" fillOpacity={0.3} />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Test Completion Status */}
-        <div>
-          <h4 className="text-md font-medium text-gray-900 mb-4">Test Completion Status</h4>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie
-                data={completionData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {completionData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+          {/* Skills Radar Chart */}
+          <div>
+            <h4 className="text-md font-medium text-gray-900 mb-4">Skills Assessment</h4>
+            <ResponsiveContainer width="100%" height={250}>
+              <RadarChart data={skillsData}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="skill" />
+                <PolarRadiusAxis angle={30} domain={[0, 100]} />
+                <Radar 
+                  name="Skills" 
+                  dataKey="value" 
+                  stroke="#8B5CF6" 
+                  fill="#8B5CF6" 
+                  fillOpacity={0.3}
+                  strokeWidth={2}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
-      {/* Detailed Test List */}
-      <div className="mt-6">
-        <h4 className="text-md font-medium text-gray-900 mb-4">Test History</h4>
-        <div className="space-y-3">
+      {/* Detailed Test List with Enhanced Design */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-md font-medium text-gray-900">Test History</h4>
+          <div className="flex space-x-2">
+            <Badge variant="success" className="text-xs">
+              {completedTests} Completed
+            </Badge>
+            <Badge variant="warning" className="text-xs">
+              {totalTests - completedTests} Pending
+            </Badge>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {tests.map((test) => (
-            <div key={test.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${
-                  test.status === 'completed' ? 'bg-green-500' : 
-                  test.status === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
-                }`} />
-                <div>
-                  <p className="font-medium text-gray-900">{test.name}</p>
-                  <p className="text-sm text-gray-500 capitalize">{test.type} Test</p>
+            <div key={test.id} className="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      test.status === 'completed' ? 'bg-green-500' : 
+                      test.status === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
+                    }`} />
+                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                      test.type === 'coding' ? 'bg-blue-100 text-blue-700' :
+                      test.type === 'interview' ? 'bg-purple-100 text-purple-700' :
+                      test.type === 'aptitude' ? 'bg-green-100 text-green-700' :
+                      'bg-orange-100 text-orange-700'
+                    }`}>
+                      {test.type.charAt(0).toUpperCase() + test.type.slice(1)}
+                    </span>
+                  </div>
+                  <h5 className="font-medium text-gray-900 mb-1">{test.name}</h5>
+                  <p className="text-sm text-gray-500">
+                    {new Date(test.date).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </p>
                 </div>
-              </div>
-              <div className="text-right">
-                <p className="font-medium text-gray-900">
-                  {test.status === 'completed' ? `${test.score}/${test.maxScore}` : test.status}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {new Date(test.date).toLocaleDateString()}
-                </p>
+                <div className="text-right">
+                  {test.status === 'completed' ? (
+                    <div>
+                      <p className="text-lg font-bold text-gray-900">
+                        {Math.round((test.score / test.maxScore) * 100)}%
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {test.score}/{test.maxScore}
+                      </p>
+                    </div>
+                  ) : (
+                    <Badge variant={test.status === 'pending' ? 'warning' : 'error'} className="text-xs">
+                      {test.status.charAt(0).toUpperCase() + test.status.slice(1)}
+                    </Badge>
+                  )}
+                </div>
               </div>
             </div>
           ))}
