@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { 
@@ -42,6 +43,14 @@ interface PrepCVStatsProps {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
 
 export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProps) {
+  const [isClient, setIsClient] = useState(false)
+  const [currentDate, setCurrentDate] = useState('')
+
+  useEffect(() => {
+    setIsClient(true)
+    setCurrentDate(new Date().toLocaleDateString())
+  }, [])
+
   // Calculate overall statistics
   const totalTests = tests.length
   const completedTests = tests.filter(test => test.status === 'completed').length
@@ -61,14 +70,14 @@ export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProp
     return acc
   }, {} as Record<string, { type: string; count: number; totalScore: number; maxScore: number }>)
 
-  const chartData = Object.values(testTypeData).map(item => ({
+  const chartData = isClient ? Object.values(testTypeData).map(item => ({
     name: item.type.charAt(0).toUpperCase() + item.type.slice(1),
     average: Math.round((item.totalScore / item.count / item.maxScore) * 100),
     count: item.count
-  }))
+  })) : []
 
   // Recent test scores for line chart
-  const recentTests = tests
+  const recentTests = isClient ? tests
     .filter(test => test.status === 'completed')
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 10)
@@ -77,7 +86,7 @@ export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProp
       name: test.name,
       score: Math.round((test.score / test.maxScore) * 100),
       date: new Date(test.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-    }))
+    })) : []
 
   // Skills radar chart data
   const skillsData = [
@@ -90,10 +99,43 @@ export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProp
   ]
 
   // Test completion status for pie chart
-  const completionData = [
+  const completionData = isClient ? [
     { name: 'Completed', value: completedTests, color: '#00C49F' },
     { name: 'Pending', value: totalTests - completedTests, color: '#FFBB28' }
-  ]
+  ] : []
+
+  // Show loading state until client is ready
+  if (!isClient) {
+    return (
+      <Card className="p-6">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="bg-blue-600 p-2 rounded-lg">
+                <TrendingUp className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">PrepCV Analytics</h3>
+                <p className="text-sm text-gray-600">Loading...</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <Badge variant="success" className="text-sm px-3 py-1">
+                Overall Score: {prepCVScore}/100
+              </Badge>
+            </div>
+          </div>
+        </div>
+        <div className="animate-pulse">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-gray-100 p-4 rounded-lg h-20"></div>
+            ))}
+          </div>
+        </div>
+      </Card>
+    )
+  }
 
   return (
     <Card className="p-6">
@@ -109,12 +151,14 @@ export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProp
               <p className="text-sm text-gray-600">Comprehensive performance insights for {studentName}</p>
             </div>
           </div>
-          <div className="text-right">
-            <Badge variant="success" className="text-sm px-3 py-1">
-              Overall Score: {prepCVScore}/100
-            </Badge>
-            <p className="text-xs text-gray-500 mt-1">Last updated: {new Date().toLocaleDateString()}</p>
-          </div>
+                      <div className="text-right">
+              <Badge variant="success" className="text-sm px-3 py-1">
+                Overall Score: {prepCVScore}/100
+              </Badge>
+              {isClient && (
+                <p className="text-xs text-gray-500 mt-1">Last updated: {currentDate}</p>
+              )}
+            </div>
         </div>
       </div>
 
@@ -141,7 +185,9 @@ export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProp
             <Award className="w-4 h-4 text-purple-600" />
             <span className="text-sm text-gray-600">Avg Score</span>
           </div>
-          <p className="text-2xl font-bold text-purple-600">{Math.round(averageScore)}%</p>
+          <p className="text-2xl font-bold text-purple-600">
+            {isClient ? Math.round(averageScore) : 0}%
+          </p>
         </div>
         
         <div className="bg-orange-50 p-4 rounded-lg">
@@ -150,7 +196,7 @@ export function PrepCVStats({ studentName, prepCVScore, tests }: PrepCVStatsProp
             <span className="text-sm text-gray-600">Completion</span>
           </div>
           <p className="text-2xl font-bold text-orange-600">
-            {totalTests > 0 ? Math.round((completedTests / totalTests) * 100) : 0}%
+            {isClient ? (totalTests > 0 ? Math.round((completedTests / totalTests) * 100) : 0) : 0}%
           </p>
         </div>
       </div>
