@@ -135,14 +135,6 @@ const Dashboard: React.FC = () => {
         {/* Stats Grid */}
         <StatsGrid stats={statsData} />
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <DashboardCharts
-            monthlyTrend={dashboardData.monthlyPlacementTrend}
-            departmentStats={dashboardData.departmentWiseStats}
-          />
-        </div>
-
         {/* Additional Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <NeedsAttentionSection
@@ -155,6 +147,14 @@ const Dashboard: React.FC = () => {
           
           <TopRecruiters
             recruiters={dashboardData.topRecruiters}
+          />
+        </div>
+
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <DashboardCharts
+            monthlyTrend={dashboardData.monthlyPlacementTrend}
+            departmentStats={dashboardData.departmentWiseStats}
           />
         </div>
 

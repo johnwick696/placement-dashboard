@@ -25,6 +25,7 @@ const mockStudent: Student = {
   rollNumber: 'CS2020001',
   name: 'Arjun Sharma',
   email: 'arjun.sharma@mitindia.edu',
+  personalEmail: 'arjun.sharma.personal@gmail.com',
   phone: '9876543210',
   department: 'Computer Science & Engineering',
   batch: '2020-2024',
@@ -213,10 +214,20 @@ const StudentDetailPage: React.FC<StudentDetailPageProps> = async ({ params }) =
                     <div className="flex items-center space-x-3">
                       <Mail className="h-5 w-5 text-gray-400" />
                       <div>
-                        <p className="text-sm text-gray-500">Email</p>
+                        <p className="text-sm text-gray-500">University Email</p>
                         <p className="text-sm font-medium">{student.email}</p>
                       </div>
                     </div>
+                    
+                    {student.personalEmail && (
+                      <div className="flex items-center space-x-3">
+                        <Mail className="h-5 w-5 text-gray-400" />
+                        <div>
+                          <p className="text-sm text-gray-500">Personal Email</p>
+                          <p className="text-sm font-medium">{student.personalEmail}</p>
+                        </div>
+                      </div>
+                    )}
                     
                     <div className="flex items-center space-x-3">
                       <Phone className="h-5 w-5 text-gray-400" />

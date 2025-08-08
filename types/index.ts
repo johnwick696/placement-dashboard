@@ -12,6 +12,7 @@ export interface Student {
   rollNumber: string;
   name: string;
   email: string;
+  personalEmail?: string;
   phone: string;
   department: string;
   batch: string;
@@ -212,6 +213,7 @@ export interface StudentFormData {
   rollNumber: string;
   name: string;
   email: string;
+  personalEmail?: string;
   phone: string;
   department: string;
   batch: string;

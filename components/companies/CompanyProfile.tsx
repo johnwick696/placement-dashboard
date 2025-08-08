@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { MapPin, Globe, Phone, Mail, Building, Users } from 'lucide-react'
+import { CompanyChatbot } from './CompanyChatbot'
 
 interface Company {
   id: string
@@ -135,103 +136,112 @@ export function CompanyProfile({ companyId }: CompanyProfileProps) {
   }
 
   return (
-    <Card>
-      <div className="mb-6">
-        <div className="flex items-center gap-4">
-          {company.logo && (
-            <img 
-              src={company.logo} 
-              alt={`${company.name} logo`}
-              className="w-16 h-16 rounded-lg object-cover"
-            />
-          )}
+    <>
+      <Card>
+        <div className="mb-6">
+          <div className="flex items-center gap-4">
+            {company.logo && (
+              <img 
+                src={company.logo} 
+                alt={`${company.name} logo`}
+                className="w-16 h-16 rounded-lg object-cover"
+              />
+            )}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">{company.name}</h2>
+              <Badge variant="default" className="mt-1">
+                {company.industry}
+              </Badge>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">{company.name}</h2>
-            <Badge variant="default" className="mt-1">
-              {company.industry}
-            </Badge>
+            <h3 className="font-semibold text-lg mb-2">About</h3>
+            <p className="text-gray-600 leading-relaxed">{company.description}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center gap-3">
+              <MapPin className="w-5 h-5 text-gray-500" />
+              <div>
+                <p className="font-medium">Location</p>
+                <p className="text-gray-600">{company.location}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Building className="w-5 h-5 text-gray-500" />
+              <div>
+                <p className="font-medium">Founded</p>
+                <p className="text-gray-600">{company.foundedYear}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Users className="w-5 h-5 text-gray-500" />
+              <div>
+                <p className="font-medium">Employees</p>
+                <p className="text-gray-600">{company.employeeCount}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Globe className="w-5 h-5 text-gray-500" />
+              <div>
+                <p className="font-medium">Website</p>
+                <a 
+                  href={company.website} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  {company.website.replace(/^https?:\/\//, '')}
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Phone className="w-5 h-5 text-gray-500" />
+              <div>
+                <p className="font-medium">Phone</p>
+                <a 
+                  href={`tel:${company.phone}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {company.phone}
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Mail className="w-5 h-5 text-gray-500" />
+              <div>
+                <p className="font-medium">Email</p>
+                <a 
+                  href={`mailto:${company.email}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {company.email}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t">
+            <Button className="w-full" variant="outline">
+              Contact Company
+            </Button>
           </div>
         </div>
-      </div>
-      <div className="space-y-6">
-        <div>
-          <h3 className="font-semibold text-lg mb-2">About</h3>
-          <p className="text-gray-600 leading-relaxed">{company.description}</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center gap-3">
-            <MapPin className="w-5 h-5 text-gray-500" />
-            <div>
-              <p className="font-medium">Location</p>
-              <p className="text-gray-600">{company.location}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Building className="w-5 h-5 text-gray-500" />
-            <div>
-              <p className="font-medium">Founded</p>
-              <p className="text-gray-600">{company.foundedYear}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Users className="w-5 h-5 text-gray-500" />
-            <div>
-              <p className="font-medium">Employees</p>
-              <p className="text-gray-600">{company.employeeCount}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Globe className="w-5 h-5 text-gray-500" />
-            <div>
-              <p className="font-medium">Website</p>
-              <a 
-                href={company.website} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                {company.website.replace(/^https?:\/\//, '')}
-              </a>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Phone className="w-5 h-5 text-gray-500" />
-            <div>
-              <p className="font-medium">Phone</p>
-              <a 
-                href={`tel:${company.phone}`}
-                className="text-blue-600 hover:underline"
-              >
-                {company.phone}
-              </a>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Mail className="w-5 h-5 text-gray-500" />
-            <div>
-              <p className="font-medium">Email</p>
-              <a 
-                href={`mailto:${company.email}`}
-                className="text-blue-600 hover:underline"
-              >
-                {company.email}
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-4 border-t">
-          <Button className="w-full" variant="outline">
-            Contact Company
-          </Button>
-        </div>
-      </div>
-    </Card>
+      </Card>
+      
+      {/* Company Chatbot */}
+      <CompanyChatbot
+        companyName={company.name}
+        companyIndustry={company.industry}
+        companyDescription={company.description}
+      />
+    </>
   )
 } 
