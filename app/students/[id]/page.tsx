@@ -16,6 +16,7 @@ import {
   Clock
 } from 'lucide-react';
 import { StudentTimeline } from '@/components/students/StudentTimeline';
+import { PrepCVStats } from '@/components/students/PrepCVStats';
 import { formatDate, formatCurrency } from '@/lib/utils';
 import type { Student } from '@/types';
 
@@ -38,6 +39,80 @@ const mockStudent: Student = {
   prepCVScore: 92,
   prepCVCompleted: true,
   testCompleted: true,
+  prepCVTests: [
+    {
+      id: '1',
+      name: 'Data Structures & Algorithms',
+      type: 'coding',
+      score: 85,
+      maxScore: 100,
+      date: new Date('2024-10-15'),
+      status: 'completed'
+    },
+    {
+      id: '2',
+      name: 'System Design Interview',
+      type: 'interview',
+      score: 78,
+      maxScore: 100,
+      date: new Date('2024-10-20'),
+      status: 'completed'
+    },
+    {
+      id: '3',
+      name: 'Technical Aptitude Test',
+      type: 'aptitude',
+      score: 92,
+      maxScore: 100,
+      date: new Date('2024-10-25'),
+      status: 'completed'
+    },
+    {
+      id: '4',
+      name: 'Database Management',
+      type: 'technical',
+      score: 88,
+      maxScore: 100,
+      date: new Date('2024-11-01'),
+      status: 'completed'
+    },
+    {
+      id: '5',
+      name: 'Frontend Development',
+      type: 'coding',
+      score: 95,
+      maxScore: 100,
+      date: new Date('2024-11-05'),
+      status: 'completed'
+    },
+    {
+      id: '6',
+      name: 'Behavioral Interview',
+      type: 'interview',
+      score: 90,
+      maxScore: 100,
+      date: new Date('2024-11-10'),
+      status: 'completed'
+    },
+    {
+      id: '7',
+      name: 'Machine Learning Basics',
+      type: 'technical',
+      score: 82,
+      maxScore: 100,
+      date: new Date('2024-11-12'),
+      status: 'completed'
+    },
+    {
+      id: '8',
+      name: 'Advanced Algorithms',
+      type: 'coding',
+      score: 87,
+      maxScore: 100,
+      date: new Date('2024-11-15'),
+      status: 'completed'
+    }
+  ],
   lastUpdated: new Date('2024-11-15'),
   updatedBy: 'admin',
   jobApplications: [
@@ -310,6 +385,15 @@ const StudentDetailPage: React.FC<StudentDetailPageProps> = async ({ params }) =
                 <h2 className="text-lg font-medium text-gray-900 mb-4">Placement Timeline</h2>
                 <StudentTimeline applications={student.jobApplications} />
               </Card>
+
+              {/* PrepCV Analytics */}
+              {student.prepCVTests && student.prepCVTests.length > 0 && (
+                <PrepCVStats
+                  studentName={student.name}
+                  prepCVScore={student.prepCVScore}
+                  tests={student.prepCVTests}
+                />
+              )}
             </div>
 
             {/* Sidebar */}

@@ -7,6 +7,16 @@ export interface User {
   lastLogin?: Date;
 }
 
+export interface PrepCVTest {
+  id: string;
+  name: string;
+  type: 'coding' | 'interview' | 'aptitude' | 'technical';
+  score: number;
+  maxScore: number;
+  date: Date;
+  status: 'completed' | 'pending' | 'failed';
+}
+
 export interface Student {
   id: string;
   rollNumber: string;
@@ -25,6 +35,7 @@ export interface Student {
   prepCVScore: number;
   prepCVCompleted: boolean;
   testCompleted: boolean;
+  prepCVTests?: PrepCVTest[];
   lastUpdated: Date;
   updatedBy: string;
   jobApplications: JobApplication[];
